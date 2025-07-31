@@ -1,0 +1,62 @@
+#cloud-config
+users:
+  - default
+  - name: ubuntu
+    groups: sudo
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh_authorized_keys:
+      - ${ssh_public_key}
+
+packages:
+  - curl
+  - wget
+  - git
+  - htop
+  - vim
+  - unzip
+  - apt-transport-https
+  - ca-certificates
+  - gnupg
+  - lsb-release
+  - nfs-common
+
+package_update: true
+package_upgrade: true
+
+write_files:
+  - path: /etc/systemd/system/mount-hdd-data.service
+    content: |
+      [Unit]
+      Description=Mount HDD Data Directory
+      After=network.target
+      
+      [Service]
+      Type=oneshot
+      RemainAfterExit=yes
+      ExecStart=/bin/mkdir -p /mnt/hdd-data
+      ExecStart=/bin/mount -t nfs ${proxmox_host_ip}:${hdd_storage_path} /mnt/hdd-data
+      ExecStop=/bin/umount /mnt/hdd-data
+      
+      [Install]
+      WantedBy=multi-user.target
+    permissions: '0644'
+
+  - path: /etc/fstab
+    content: |
+      # HDD Data Mount via NFS
+      ${proxmox_host_ip}:${hdd_storage_path} /mnt/hdd-data nfs defaults,_netdev 0 0
+    append: true
+
+runcmd:
+  - systemctl daemon-reload
+  - systemctl enable mount-hdd-data.service
+  - mkdir -p /mnt/hdd-data
+  - systemctl start mount-hdd-data.service
+  - chown -R ubuntu:ubuntu /mnt/hdd-data
+  - chmod 755 /mnt/hdd-data
+
+ssh_pwauth: false
+disable_root: true
+
+final_message: "Cloud-init setup complete. System ready for k3s installation."
