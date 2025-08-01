@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: bazarr
+  name: qbittorrent-web
   namespace: media
 spec:
   type: ClusterIP
   selector:
-    app: bazarr
+    app: qbittorrent
   ports:
-  - name: http
-    port: 6767
-    targetPort: 6767
+  - name: webui
+    port: 8080
+    targetPort: 8080

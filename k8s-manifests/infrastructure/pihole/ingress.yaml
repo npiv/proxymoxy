@@ -1,24 +1,24 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: plex
-  namespace: media
+  name: pihole
+  namespace: infrastructure
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
 spec:
   tls:
   - hosts:
-    - plex.homelab.local
-    secretName: plex-tls
+    - pihole.homelab.local
+    secretName: pihole-tls
   rules:
-  - host: plex.homelab.local
+  - host: pihole.homelab.local
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: plex
+            name: pihole
             port:
-              number: 32400
+              number: 80

@@ -13,8 +13,6 @@ spec:
       labels:
         app: qbittorrent
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: k3s-worker-3
       containers:
       - name: qbittorrent
         image: linuxserver/qbittorrent:latest

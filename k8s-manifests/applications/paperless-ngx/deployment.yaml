@@ -13,8 +13,6 @@ spec:
       labels:
         app: paperless-ngx
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: k3s-worker-3
       containers:
       - name: paperless-ngx
         image: ghcr.io/paperless-ngx/paperless-ngx:latest

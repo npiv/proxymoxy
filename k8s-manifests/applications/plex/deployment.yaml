@@ -13,8 +13,6 @@ spec:
       labels:
         app: plex
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: k3s-worker-1
       containers:
       - name: plex
         image: plexinc/pms-docker:latest

@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: plex
+  name: prowlarr
   namespace: media
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
@@ -9,16 +9,16 @@ metadata:
 spec:
   tls:
   - hosts:
-    - plex.homelab.local
-    secretName: plex-tls
+    - prowlarr.homelab.local
+    secretName: prowlarr-tls
   rules:
-  - host: plex.homelab.local
+  - host: prowlarr.homelab.local
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: plex
+            name: prowlarr
             port:
-              number: 32400
+              number: 9696

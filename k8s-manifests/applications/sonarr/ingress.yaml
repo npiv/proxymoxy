@@ -9,10 +9,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - sonarr.local.example.com
+    - sonarr.homelab.local
     secretName: sonarr-tls
   rules:
-  - host: sonarr.local.example.com
+  - host: sonarr.homelab.local
     http:
       paths:
       - path: /

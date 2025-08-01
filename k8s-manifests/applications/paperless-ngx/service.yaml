@@ -4,6 +4,7 @@ metadata:
   name: paperless-ngx
   namespace: documents
 spec:
+  type: ClusterIP
   selector:
     app: paperless-ngx
   ports:

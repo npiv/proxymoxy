@@ -1,24 +1,24 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: plex
-  namespace: media
+  name: paperless-ngx
+  namespace: documents
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
 spec:
   tls:
   - hosts:
-    - plex.homelab.local
-    secretName: plex-tls
+    - paperless.homelab.local
+    secretName: paperless-tls
   rules:
-  - host: plex.homelab.local
+  - host: paperless.homelab.local
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: plex
+            name: paperless-ngx
             port:
-              number: 32400
+              number: 8000

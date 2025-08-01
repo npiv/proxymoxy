@@ -13,8 +13,6 @@ spec:
       labels:
         app: prowlarr
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: k3s-worker-2
       containers:
       - name: prowlarr
         image: linuxserver/prowlarr:latest

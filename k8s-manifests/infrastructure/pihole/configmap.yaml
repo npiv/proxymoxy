@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pihole-custom-dns
+  namespace: infrastructure
+data:
+  custom.list: |
+    # Homelab local DNS entries
+    # Point all homelab services to Traefik ingress
+    # Note: Update these IPs to match your actual node IPs after deployment
+    192.168.1.120 traefik.homelab.local
+    192.168.1.120 argocd.homelab.local
+    192.168.1.120 plex.homelab.local
+    192.168.1.120 sonarr.homelab.local
+    192.168.1.120 radarr.homelab.local
+    192.168.1.120 bazarr.homelab.local
+    192.168.1.120 prowlarr.homelab.local
+    192.168.1.120 qbittorrent.homelab.local
+    192.168.1.120 paperless.homelab.local
+    192.168.1.120 pihole.homelab.local

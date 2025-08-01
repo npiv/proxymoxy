@@ -9,10 +9,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - radarr.local.example.com
+    - radarr.homelab.local
     secretName: radarr-tls
   rules:
-  - host: radarr.local.example.com
+  - host: radarr.homelab.local
     http:
       paths:
       - path: /
