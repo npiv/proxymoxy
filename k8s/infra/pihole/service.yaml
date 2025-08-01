@@ -19,34 +19,19 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: pihole-dns-tcp
+  name: pihole-dns
   namespace: infra
   labels:
     app: pihole
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
   - port: 53
     targetPort: 53
-    nodePort: 30054
     protocol: TCP
     name: dns-tcp
-  selector:
-    app: pihole
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: pihole-dns-udp
-  namespace: infra
-  labels:
-    app: pihole
-spec:
-  type: NodePort
-  ports:
   - port: 53
     targetPort: 53
-    nodePort: 30053
     protocol: UDP
     name: dns-udp
   selector:
