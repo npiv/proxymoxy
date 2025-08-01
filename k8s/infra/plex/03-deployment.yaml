@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plex
+  namespace: infra
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: plex
+  template:
+    metadata:
+      labels:
+        app: plex
+    spec:
+      containers:
+      - name: plex
+        image: plexinc/pms-docker:latest
+        ports:
+        - containerPort: 32400
+          name: plex-web
+          protocol: TCP
+        env:
+        - name: TZ
+          value: "Europe/Brussels"
+        - name: PLEX_CLAIM
+          value: ""
+        - name: ADVERTISE_IP
+          value: "http://192.168.1.10:32400/"
+        volumeMounts:
+        - name: plex-config
+          mountPath: /config
+        - name: plex-media
+          mountPath: /data
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "4Gi"
+            cpu: "2000m"
+      volumes:
+      - name: plex-config
+        persistentVolumeClaim:
+          claimName: plex-config-pvc
+      - name: plex-media
+        persistentVolumeClaim:
+          claimName: plex-media-pvc

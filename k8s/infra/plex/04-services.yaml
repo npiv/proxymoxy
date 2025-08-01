@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: plex
+  namespace: infra
+spec:
+  selector:
+    app: plex
+  ports:
+  - name: plex-web
+    port: 32400
+    protocol: TCP
+    targetPort: plex-web
+  type: LoadBalancer
