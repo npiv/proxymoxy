@@ -80,6 +80,16 @@ spec:
             configMapKeyRef:
               name: pihole-config
               key: CONDITIONAL_FORWARDING
+        - name: INTERFACE
+          valueFrom:
+            configMapKeyRef:
+              name: pihole-config
+              key: INTERFACE
+        - name: DNSMASQ_USER
+          valueFrom:
+            configMapKeyRef:
+              name: pihole-config
+              key: DNSMASQ_USER
         volumeMounts:
         - name: pihole-data
           mountPath: /etc/pihole
