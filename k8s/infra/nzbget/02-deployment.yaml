@@ -45,4 +45,4 @@ spec:
           claimName: nzbget-config-pvc
       - name: nzbget-media
         persistentVolumeClaim:
-          claimName: nzbget-media-pvc
+          claimName: nzbget-downloads-pvc

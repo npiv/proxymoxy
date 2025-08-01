@@ -12,9 +12,24 @@ spec:
       storage: 1Gi
 ---
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nzbget-downloads-pv
+spec:
+  capacity:
+    storage: 4Ti
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs
+  nfs:
+    server: 192.168.1.100
+    path: /mnt/hdd-data/nzbgetdownloads
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: nzbget-media-pvc
+  name: nzbget-downloads-pvc
   namespace: infra
 spec:
   storageClassName: nfs
@@ -23,4 +38,4 @@ spec:
   resources:
     requests:
       storage: 4Ti
-  volumeName: plex-media-pv
+  volumeName: nzbget-downloads-pv
