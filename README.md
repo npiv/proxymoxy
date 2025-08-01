@@ -14,11 +14,8 @@ Follow these steps in order:
 
 ### 1. Infrastructure Deployment
 
-Start with Terraform to provision the VMs:
-
 ```bash
-cd terraform/
-# Follow instructions in terraform/README.md
+# Follow instructions in MANUAL_SETUP.MD
 ```
 
 This will create:

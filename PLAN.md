@@ -105,19 +105,6 @@ Proxmox Host (32GB RAM total)
 
 ### Infrastructure as Code Stack
 ```
-Terraform
-├── Proxmox VM provisioning
-├── Resource allocation (CPU/RAM/storage)
-├── Network configuration
-├── HDD storage mounts
-└── Cloud-init templates
-
-Bash Scripts
-├── k3s master installation
-├── Worker node joining
-├── kubectl configuration
-└── Basic cluster validation
-
 ArgoCD
 ├── GitOps application deployment
 ├── Helm chart management
@@ -128,15 +115,6 @@ ArgoCD
 ### Repository Structure
 ```
 proxmox-k3s/
-├── terraform/
-│   ├── main.tf (VM definitions)
-│   ├── variables.tf
-│   ├── outputs.tf
-│   └── cloud-init/
-├── scripts/
-│   ├── install-k3s-master.sh
-│   ├── join-workers.sh
-│   └── configure-kubectl.sh
 ├── argocd/
 │   ├── applications/
 │   ├── projects/
@@ -152,7 +130,7 @@ proxmox-k3s/
 
 ### Phase 1: Infrastructure as Code Setup
 1. Install RAM upgrade and configure Proxmox host
-2. Set up Terraform with Proxmox provider
+2. Set up machines
 3. Create VM definitions with proper resource allocation
 4. Configure cloud-init templates for Ubuntu Server
 5. Provision all VMs with shared HDD storage mounts
