@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: homer
+  namespace: infra
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: homer
+  template:
+    metadata:
+      labels:
+        app: homer
+    spec:
+      containers:
+      - name: homer
+        image: b4bz/homer:latest
+        ports:
+        - containerPort: 8080
+          name: homer-web
+          protocol: TCP
+        env:
+        - name: INIT_ASSETS
+          value: "1"
+        - name: UID
+          value: "1000"
+        - name: GID
+          value: "1000"
+        volumeMounts:
+        - name: homer-config-file
+          mountPath: /www/assets/config.yml
+          subPath: config.yml
+        - name: homer-assets
+          mountPath: /www/assets
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+      volumes:
+      - name: homer-config-file
+        configMap:
+          name: homer-config
+      - name: homer-assets
+        persistentVolumeClaim:
+          claimName: homer-config-pvc

@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: homer-config
+  namespace: infra
+data:
+  config.yml: |
+    title: "Casa Dashboard"
+    subtitle: "Home Server Services"
+    logo: "logo.png"
+    icon: "fas fa-skull-crossbones"
+    
+    header: true
+    footer: '<p>Created with <span class="has-text-danger">❤️</span> with <a href="https://bulma.io/">bulma</a>, <a href="https://vuejs.org/">vuejs</a> & <a href="https://fontawesome.com/">font awesome</a> // Fork me on <a href="https://github.com/bastienwirtz/homer"><i class="fab fa-github-alt"></i></a></p>'
+    
+    theme: default
+    colors:
+      light:
+        highlight-primary: "#3367d6"
+        highlight-secondary: "#4285f4"
+        highlight-hover: "#5a95f5"
+        background: "#f5f5f5"
+        card-background: "#ffffff"
+        text: "#363636"
+        text-header: "#ffffff"
+        text-title: "#303030"
+        text-subtitle: "#424242"
+        card-shadow: rgba(0, 0, 0, 0.1)
+        link: "#3273dc"
+        link-hover: "#363636"
+      dark:
+        highlight-primary: "#3367d6"
+        highlight-secondary: "#4285f4"
+        highlight-hover: "#5a95f5"
+        background: "#131313"
+        card-background: "#2b2b2b"
+        text: "#eaeaea"
+        text-header: "#ffffff"
+        text-title: "#fafafa"
+        text-subtitle: "#f5f5f5"
+        card-shadow: rgba(0, 0, 0, 0.4)
+        link: "#3273dc"
+        link-hover: "#ffdd57"
+
+    services:
+      - name: "Media Services"
+        icon: "fas fa-play"
+        items:
+          - name: "Plex"
+            logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/plex.png"
+            subtitle: "Media Server"
+            tag: "media"
+            url: "http://plex.casa.local:32400"
+            target: "_blank"
+          
+          - name: "Sonarr"
+            logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/sonarr.png"
+            subtitle: "TV Series Management"
+            tag: "media"
+            url: "http://sonarr.casa.local:8989"
+            target: "_blank"
+          
+          - name: "Prowlarr"
+            logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/prowlarr.png"
+            subtitle: "Indexer Manager"
+            tag: "media"
+            url: "http://prowlarr.casa.local:9696"
+            target: "_blank"
+
+      - name: "Download Services"
+        icon: "fas fa-download"
+        items:
+          - name: "qBittorrent"
+            logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/qbittorrent.png"
+            subtitle: "Torrent Client"
+            tag: "download"
+            url: "http://qbittorrent.casa.local:8080"
+            target: "_blank"
+          
+          - name: "NZBGet"
+            logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/nzbget.png"
+            subtitle: "Usenet Client"
+            tag: "download"
+            url: "http://nzbget.casa.local:6789"
+            target: "_blank"
+
+      - name: "Infrastructure"
+        icon: "fas fa-server"
+        items:
+          - name: "PiHole"
+            logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/pihole.png"
+            subtitle: "DNS & Ad Blocking"
+            tag: "infrastructure"
+            url: "http://pihole.casa.local"
+            target: "_blank"
