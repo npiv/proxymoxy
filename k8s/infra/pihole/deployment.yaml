@@ -17,7 +17,7 @@ spec:
     spec:
       initContainers:
       - name: password-reset
-        image: busybox:1.35
+        image: busybox:latest
         command: ['sh', '-c', 'rm -f /etc/pihole/setupVars.conf']
         volumeMounts:
         - name: pihole-data
