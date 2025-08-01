@@ -28,7 +28,7 @@ spec:
   ports:
   - port: 53
     targetPort: 53
-    nodePort: 30053
+    nodePort: 30054
     protocol: TCP
     name: dns-tcp
   selector:
