@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: qbittorrent-web
+  namespace: infra
+spec:
+  selector:
+    app: qbittorrent
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: http
+  type: LoadBalancer
+  loadBalancerIP: 192.168.1.205
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qbittorrent-torrent
+  namespace: infra
+spec:
+  selector:
+    app: qbittorrent
+  ports:
+  - name: torrent-tcp
+    port: 6881
+    protocol: TCP
+    targetPort: torrent-tcp
+  - name: torrent-udp
+    port: 6881
+    protocol: UDP
+    targetPort: torrent-udp
+  type: LoadBalancer
+  loadBalancerIP: 192.168.1.206
