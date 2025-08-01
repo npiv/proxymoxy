@@ -1,24 +1,10 @@
 apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: pihole-etc-pv
-spec:
-  storageClassName: local-storage
-  capacity:
-    storage: 1Gi
-  accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: "/mnt/k3s-storage/pihole-etc"
-    type: DirectoryOrCreate
----
-apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: pihole-etc-pvc
   namespace: infra
 spec:
-  storageClassName: local-storage
+  storageClassName: local-path
   accessModes:
     - ReadWriteOnce
   resources:
@@ -26,26 +12,12 @@ spec:
       storage: 1Gi
 ---
 apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: pihole-dnsmasq-pv
-spec:
-  storageClassName: local-storage
-  capacity:
-    storage: 1Gi
-  accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: "/mnt/k3s-storage/pihole-dnsmasq"
-    type: DirectoryOrCreate
----
-apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: pihole-dnsmasq-pvc
   namespace: infra
 spec:
-  storageClassName: local-storage
+  storageClassName: local-path
   accessModes:
     - ReadWriteOnce
   resources:
