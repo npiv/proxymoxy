@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: media-storage
+  namespace: media
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 2Ti
+  storageClassName: nfs-storage
+  volumeName: nfs-media-pv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: downloads-storage
+  namespace: media
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Ti
+  storageClassName: nfs-storage
+  volumeName: nfs-media-pv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: config-storage
+  namespace: media
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: local-path

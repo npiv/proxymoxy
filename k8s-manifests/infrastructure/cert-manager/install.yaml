@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cert-manager
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cert-manager-installer
+  namespace: cert-manager
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cert-manager-installer
+  namespace: cert-manager
+spec:
+  template:
+    spec:
+      serviceAccountName: cert-manager-installer
+      containers:
+      - name: installer
+        image: bitnami/kubectl:latest
+        command:
+        - /bin/sh
+        - -c
+        - |
+          kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.1/cert-manager.yaml
+      restartPolicy: OnFailure
