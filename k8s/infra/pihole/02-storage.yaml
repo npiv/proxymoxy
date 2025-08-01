@@ -16,7 +16,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: pihole-etc-pvc
-  namespace: pihole
+  namespace: infra
 spec:
   storageClassName: local-storage
   accessModes:
@@ -43,7 +43,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: pihole-dnsmasq-pvc
-  namespace: pihole
+  namespace: infra
 spec:
   storageClassName: local-storage
   accessModes:
