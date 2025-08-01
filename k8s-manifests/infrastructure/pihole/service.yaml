@@ -11,14 +11,14 @@ spec:
   - name: http
     port: 80
     targetPort: 80
-    nodePort: 30053
+    nodePort: 30850
   - name: dns-tcp
     port: 53
     targetPort: 53
-    nodePort: 30054
+    nodePort: 30853
     protocol: TCP
   - name: dns-udp
     port: 53
     targetPort: 53
-    nodePort: 30054
+    nodePort: 30853
     protocol: UDP

@@ -36,13 +36,31 @@ print_status "Installing ArgoCD..."
 print_status "Waiting for ArgoCD to be ready..."
 kubectl wait --for=condition=available --timeout=600s deployment/argocd-server -n argocd
 
-# Apply infrastructure manifests directly first
-print_status "Applying infrastructure manifests..."
-kubectl apply -k k8s-manifests/infrastructure/
+# Apply infrastructure manifests in correct order
+print_status "Creating namespaces first..."
+kubectl apply -f k8s-manifests/infrastructure/storage/namespace.yaml
+kubectl apply -f k8s-manifests/infrastructure/pihole/namespace.yaml
+
+print_status "Installing cert-manager..."
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.1/cert-manager.yaml
+
+print_status "Waiting for cert-manager to be ready..."
+kubectl wait --for=condition=available --timeout=300s deployment/cert-manager -n cert-manager
+
+print_status "Applying cert-manager cluster issuers..."
+kubectl apply -f k8s-manifests/infrastructure/cert-manager/cluster-issuer.yaml
+
+print_status "Applying storage configuration..."
+kubectl apply -f k8s-manifests/infrastructure/storage/
+
+print_status "Applying Pi-hole manifests..."
+kubectl apply -f k8s-manifests/infrastructure/pihole/
 
 # Wait for infrastructure to be ready
 print_status "Waiting for infrastructure components..."
-kubectl wait --for=condition=available --timeout=300s deployment/traefik -n traefik || true
+kubectl wait --for=condition=available --timeout=300s deployment/pihole -n infrastructure || true
+
+print_status "Note: Using k3s built-in Traefik (already running)"
 
 # Deploy ArgoCD applications
 print_status "Deploying ArgoCD applications..."
@@ -59,8 +77,9 @@ echo ""
 echo "=== Access URLs ==="
 echo "Direct NodePort Access:"
 echo "- ArgoCD: https://any-node-ip:30443"
-echo "- Traefik Dashboard: http://any-node-ip:30808"
-echo "- Pi-hole: http://any-node-ip:30053"
+echo "- Traefik (k3s built-in): http://any-node-ip:80 or https://any-node-ip:443"
+echo "- Pi-hole: http://any-node-ip:30850"
+echo "- Pi-hole DNS: Configure devices to use any-node-ip:30853"
 echo "- Plex: http://any-node-ip:32400"
 echo ""
 echo "Via Pi-hole DNS (after DNS setup):"
