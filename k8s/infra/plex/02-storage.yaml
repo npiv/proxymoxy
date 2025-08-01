@@ -21,6 +21,7 @@ spec:
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs
   nfs:
     server: 192.168.1.100
     path: /mnt/hdd-data
@@ -31,6 +32,7 @@ metadata:
   name: plex-media-pvc
   namespace: infra
 spec:
+  storageClassName: nfs
   accessModes:
     - ReadWriteMany
   resources:
