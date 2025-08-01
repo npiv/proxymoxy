@@ -29,14 +29,14 @@ spec:
         env:
         - name: TZ
           value: "Europe/Brussels"
-        - name: WEBPASSWORD
+        - name: FTLCONF_webserver_api_password
           value: "monkey1"
         - name: ServerIP
-          value: "192.168.1.120"
+          value: "192.168.1.201"
         - name: VIRTUAL_HOST
-          value: "YOUR_VIRTUAL_HOST"
-        - name: FTLCONF_LOCAL_IPV4
-          value: "192.168.1.120"
+          value: "pihole.casa.local"
+        - name: DNSMASQ_LISTENING
+          value: "all"
         volumeMounts:
         - name: pihole-etc
           mountPath: /etc/pihole
