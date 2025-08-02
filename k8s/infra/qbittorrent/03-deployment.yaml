@@ -15,9 +15,6 @@ spec:
       labels:
         app: qbittorrent
     spec:
-      # Enable process namespace sharing between containers
-      shareProcessNamespace: true
-      
       # Security context for VPN isolation
       securityContext:
         fsGroup: 1000
