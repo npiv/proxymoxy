@@ -91,5 +91,5 @@ data:
             logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/pihole.png"
             subtitle: "DNS & Ad Blocking"
             tag: "infrastructure"
-            url: "http://pihole.casa.local"
+            url: "http://pihole.casa.local/admin"
             target: "_blank"
