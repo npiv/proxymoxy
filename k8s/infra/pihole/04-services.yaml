@@ -53,9 +53,6 @@ spec:
     targetPort: http
   type: LoadBalancer
   loadBalancerIP: fc00:1234:5678:9abc::1
-  ipFamilyPolicy: SingleStack
-  ipFamilies:
-  - IPv6
 ---
 apiVersion: v1
 kind: Service
@@ -72,6 +69,3 @@ spec:
     targetPort: dns-udp
   type: LoadBalancer
   loadBalancerIP: fc00:1234:5678:9abc::2
-  ipFamilyPolicy: SingleStack
-  ipFamilies:
-  - IPv6
