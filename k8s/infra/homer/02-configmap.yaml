@@ -67,6 +67,13 @@ data:
             url: "http://192.168.1.204:8989"
             target: "_blank"
           
+          - name: "Radarr"
+            logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/radarr.png"
+            subtitle: "Movie Management"
+            tag: "media"
+            url: "http://192.168.1.205:7878"
+            target: "_blank"
+          
           - name: "Prowlarr"
             logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/prowlarr.png"
             subtitle: "Indexer Manager"
