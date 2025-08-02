@@ -165,8 +165,8 @@ spec:
         - |
           # Wait for VPN to be established
           echo "Waiting for VPN connection..."
-          while ! ip link show tun0 >/dev/null 2>&1; do
-            echo "Waiting for tun0 interface..."
+          while ! ip link show tailscale0 >/dev/null 2>&1; do
+            echo "Waiting for tailscale0 interface..."
             sleep 5
           done
           
@@ -192,9 +192,9 @@ spec:
             - -c
             - |
               # Check if we can reach internet through VPN only
-              if ip link show tun0 >/dev/null 2>&1; then
+              if ip link show tailscale0 >/dev/null 2>&1; then
                 # Try to reach a test endpoint through VPN interface
-                curl -s --max-time 10 --interface tun0 https://ipinfo.io/ip >/dev/null
+                curl -s --max-time 10 --interface tailscale0 https://ipinfo.io/ip >/dev/null
               else
                 exit 1
               fi

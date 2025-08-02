@@ -7,8 +7,8 @@ data:
   # qBittorrent configuration to bind to VPN interface only
   qBittorrent.conf: |
     [BitTorrent]
-    Session\Interface=tun0
-    Session\InterfaceName=tun0
+    Session\Interface=tailscale0
+    Session\InterfaceName=tailscale0
     Session\Port=6881
     
     [Preferences]
@@ -16,7 +16,7 @@ data:
     Connection\UPnP=false
     Connection\RandomPort=false
     Connection\InterfaceAddress=0.0.0.0
-    Connection\InterfaceName=tun0
+    Connection\InterfaceName=tailscale0
     
     # Security settings
     Advanced\AnonymousMode=true
@@ -29,13 +29,13 @@ data:
     set -e
     
     # Check if Tailscale interface exists
-    if ! ip link show tun0 >/dev/null 2>&1; then
-      echo "ERROR: VPN interface tun0 not found"
+    if ! ip link show tailscale0 >/dev/null 2>&1; then
+      echo "ERROR: VPN interface tailscale0 not found"
       exit 1
     fi
     
     # Check if we can reach the internet through VPN
-    if ! curl -s --max-time 10 --interface tun0 https://ipinfo.io/ip >/dev/null; then
+    if ! curl -s --max-time 10 --interface tailscale0 https://ipinfo.io/ip >/dev/null; then
       echo "ERROR: Cannot reach internet through VPN"
       exit 1
     fi
@@ -95,7 +95,7 @@ data:
     set -e
     
     # Get IP through VPN interface
-    VPN_IP=$(curl -s --max-time 10 --interface tun0 https://ipinfo.io/ip || echo "FAILED")
+    VPN_IP=$(curl -s --max-time 10 --interface tailscale0 https://ipinfo.io/ip || echo "FAILED")
     
     # Get default IP (should fail if properly configured)
     DEFAULT_IP=$(curl -s --max-time 10 https://ipinfo.io/ip 2>/dev/null || echo "BLOCKED")
