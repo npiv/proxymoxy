@@ -49,7 +49,7 @@ Example nodes:
 
 ### 3. Create Kubernetes Secret
 
-Replace the placeholders and create the secret:
+**Important**: The secret must be created manually as it's not managed by ArgoCD to prevent credentials from being stored in Git.
 
 ```bash
 kubectl create secret generic tailscale-auth \
@@ -59,13 +59,18 @@ kubectl create secret generic tailscale-auth \
   --from-literal=TS_API_KEY=""
 ```
 
+If the secret already exists (from a previous deployment attempt), delete it first:
+```bash
+kubectl delete secret tailscale-auth -n infra
+# Then create the new one with real values
+```
+
 ### 4. Apply Kubernetes Manifests
 
 Apply the files in order:
 
 ```bash
-# Apply secrets first
-kubectl apply -f 00-secrets.yaml
+# Note: Secrets are created manually (see step 3 above)
 
 # Apply ConfigMaps
 kubectl apply -f 01-configmap.yaml
