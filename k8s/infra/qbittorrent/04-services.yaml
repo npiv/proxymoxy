@@ -3,8 +3,6 @@ kind: Service
 metadata:
   name: qbittorrent-web
   namespace: infra
-  labels:
-    app: qbittorrent
 spec:
   selector:
     app: qbittorrent
@@ -16,26 +14,22 @@ spec:
   type: LoadBalancer
   loadBalancerIP: 192.168.1.205
 ---
-# Internal cluster service for Sonarr communication
 apiVersion: v1
 kind: Service
 metadata:
-  name: qbittorrent-internal
+  name: qbittorrent-torrent
   namespace: infra
-  labels:
-    app: qbittorrent
 spec:
   selector:
     app: qbittorrent
   ports:
-  - name: http
-    port: 8080
+  - name: torrent-tcp
+    port: 6881
     protocol: TCP
-    targetPort: http
-  type: ClusterIP
-  # No external load balancer - only accessible within cluster
----
-# Note: Torrent traffic service removed
-# All torrent traffic now goes through Tailscale VPN exit nodes
-# External torrent ports (6881 TCP/UDP) are no longer exposed
-# This prevents IP leaks and ensures all BitTorrent traffic uses the VPN
+    targetPort: torrent-tcp
+  - name: torrent-udp
+    port: 6881
+    protocol: UDP
+    targetPort: torrent-udp
+  type: LoadBalancer
+  loadBalancerIP: 192.168.1.206
