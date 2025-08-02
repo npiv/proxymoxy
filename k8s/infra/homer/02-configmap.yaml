@@ -91,6 +91,16 @@ data:
             url: "http://192.168.1.208:6789/"
             target: "_blank"
 
+      - name: "Home Automation"
+        icon: "fas fa-home"
+        items:
+          - name: "Home Assistant"
+            logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/home-assistant.png"
+            subtitle: "Home Automation"
+            tag: "automation"
+            url: "http://192.168.1.211:8123"
+            target: "_blank"
+
       - name: "Infrastructure"
         icon: "fas fa-server"
         items:
