@@ -58,6 +58,10 @@ spec:
           value: "/var/lib/tailscale"
         - name: TS_USERSPACE
           value: "false"
+        - name: TS_KUBE_SECRET
+          value: ""
+        - name: TS_ACCEPT_DNS
+          value: "true"
         command:
         - sh
         - -c
@@ -100,15 +104,19 @@ spec:
           done
         securityContext:
           runAsUser: 0
+          privileged: true
           capabilities:
             add:
             - NET_ADMIN
             - SYS_MODULE
+            - NET_RAW
         volumeMounts:
         - name: tailscale-state
           mountPath: /var/lib/tailscale
         - name: tailscale-config
           mountPath: /scripts
+        - name: dev-net-tun
+          mountPath: /dev/net/tun
         resources:
           requests:
             memory: "128Mi"
@@ -231,3 +239,7 @@ spec:
         configMap:
           name: qbittorrent-config
           defaultMode: 0644
+      - name: dev-net-tun
+        hostPath:
+          path: /dev/net/tun
+          type: CharDevice
