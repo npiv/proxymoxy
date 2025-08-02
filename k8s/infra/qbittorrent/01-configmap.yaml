@@ -4,7 +4,7 @@ metadata:
   name: qbittorrent-config
   namespace: infra
 data:
-  # qBittorrent configuration to bind to VPN interface only
+  # qBittorrent configuration to bind to VPN interface only for torrents
   qBittorrent.conf: |
     [BitTorrent]
     Session\Interface=tailscale0
@@ -17,6 +17,9 @@ data:
     Connection\RandomPort=false
     Connection\InterfaceAddress=0.0.0.0
     Connection\InterfaceName=tailscale0
+    # Web UI should bind to all interfaces for cluster access
+    WebUI\Address=*
+    WebUI\Port=8080
     
     # Security settings
     Advanced\AnonymousMode=true
