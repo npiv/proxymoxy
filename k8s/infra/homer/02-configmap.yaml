@@ -53,6 +53,13 @@ data:
             url: "http://192.168.1.203:32400"
             target: "_blank"
           
+          - name: "Jellyfin"
+            logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/jellyfin.png"
+            subtitle: "Media Server"
+            tag: "media"
+            url: "http://192.168.1.204:8096"
+            target: "_blank"
+          
           - name: "Sonarr"
             logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/sonarr.png"
             subtitle: "TV Series Management"
