@@ -13,8 +13,6 @@ spec:
       labels:
         app: homeassistant
     spec:
-      hostNetwork: true
-      dnsPolicy: ClusterFirstWithHostNet
       containers:
       - name: homeassistant
         image: ghcr.io/home-assistant/home-assistant:stable
