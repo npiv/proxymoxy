@@ -63,11 +63,6 @@ spec:
   # Allow all traffic through VPN interface (this is handled at container level)
   # The container binding ensures only VPN traffic is allowed
   - to: []
-    ports:
-    - protocol: TCP
-      port: 1-65535
-    - protocol: UDP 
-      port: 1-65535
 
 ---
 apiVersion: networking.k8s.io/v1
@@ -152,6 +147,3 @@ spec:
   # Allow internal cluster networking
   - to:
     - namespaceSelector: {}
-    ports:
-    - protocol: TCP
-      port: 1-65535
