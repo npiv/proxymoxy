@@ -20,8 +20,8 @@ spec:
   type: LoadBalancer
   ipFamilyPolicy: PreferDualStack
   ipFamilies:
-  - ipv4
-  - ipv6
+  - IPv4
+  - IPv6
 ---
 apiVersion: v1
 kind: Service
@@ -41,5 +41,5 @@ spec:
   type: LoadBalancer
   ipFamilyPolicy: PreferDualStack
   ipFamilies:
-  - ipv4
-  - ipv6
+  - IPv4
+  - IPv6
