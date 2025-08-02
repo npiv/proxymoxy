@@ -71,7 +71,7 @@ data:
             logo: "https://raw.githubusercontent.com/NX211/homer-icons/master/png/radarr.png"
             subtitle: "Movie Management"
             tag: "media"
-            url: "http://192.168.1.205:7878"
+            url: "http://192.168.1.212:7878"
             target: "_blank"
           
           - name: "Prowlarr"
