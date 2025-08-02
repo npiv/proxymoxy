@@ -15,19 +15,125 @@ spec:
       labels:
         app: qbittorrent
     spec:
+      # Enable process namespace sharing between containers
+      shareProcessNamespace: true
+      
+      # Security context for VPN isolation
+      securityContext:
+        fsGroup: 1000
+      
+      # Init container to set up networking
+      initContainers:
+      - name: network-setup
+        image: busybox:1.35
+        command:
+        - sh
+        - -c
+        - |
+          # Wait for tailscale to be ready
+          echo "Waiting for Tailscale to initialize network..."
+          sleep 10
+        securityContext:
+          runAsUser: 0
+          capabilities:
+            add:
+            - NET_ADMIN
+      
       containers:
+      # Tailscale VPN sidecar container
+      - name: tailscale
+        image: tailscale/tailscale:latest
+        env:
+        - name: TS_AUTHKEY
+          valueFrom:
+            secretKeyRef:
+              name: tailscale-auth
+              key: TS_AUTHKEY
+        - name: TS_EXIT_NODE
+          valueFrom:
+            secretKeyRef:
+              name: tailscale-auth
+              key: TS_EXIT_NODE
+        - name: TS_STATE_DIR
+          value: "/var/lib/tailscale"
+        - name: TS_USERSPACE
+          value: "false"
+        command:
+        - sh
+        - -c
+        - |
+          # Create required directories
+          mkdir -p /var/lib/tailscale /var/run/tailscale
+          
+          # Start tailscaled daemon
+          tailscaled --state=/var/lib/tailscale/tailscaled.state --socket=/var/run/tailscale/tailscaled.sock &
+          
+          # Wait for daemon to start
+          sleep 5
+          
+          # Connect with exit node
+          tailscale up \
+            --auth-key="${TS_AUTHKEY}" \
+            --exit-node="${TS_EXIT_NODE}" \
+            --exit-node-allow-lan-access=true \
+            --accept-routes=false \
+            --advertise-routes="" \
+            --hostname=qbittorrent-vpn \
+            --shields-up=true
+          
+          echo "Tailscale connected successfully"
+          
+          # Keep container running and monitor connection
+          while true; do
+            if ! tailscale status >/dev/null 2>&1; then
+              echo "Tailscale connection lost, restarting..."
+              tailscale up \
+                --auth-key="${TS_AUTHKEY}" \
+                --exit-node="${TS_EXIT_NODE}" \
+                --exit-node-allow-lan-access=true \
+                --accept-routes=false \
+                --advertise-routes="" \
+                --hostname=qbittorrent-vpn \
+                --shields-up=true
+            fi
+            sleep 30
+          done
+        securityContext:
+          runAsUser: 0
+          capabilities:
+            add:
+            - NET_ADMIN
+            - SYS_MODULE
+        volumeMounts:
+        - name: tailscale-state
+          mountPath: /var/lib/tailscale
+        - name: tailscale-config
+          mountPath: /scripts
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "50m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        livenessProbe:
+          exec:
+            command:
+            - tailscale
+            - status
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+      
+      # qBittorrent main container with VPN binding
       - name: qbittorrent
         image: linuxserver/qbittorrent:latest
         ports:
         - name: http
           containerPort: 8080
           protocol: TCP
-        - name: torrent-tcp
-          containerPort: 6881
-          protocol: TCP
-        - name: torrent-udp
-          containerPort: 6881
-          protocol: UDP
+        # Remove external torrent ports - traffic goes through VPN
         env:
         - name: PUID
           value: "1000"
@@ -42,6 +148,27 @@ spec:
           mountPath: /config
         - name: downloads
           mountPath: /downloads
+        - name: qbittorrent-config
+          mountPath: /config-overlay
+        # Startup script to configure VPN binding
+        command:
+        - sh
+        - -c
+        - |
+          # Wait for VPN to be established
+          echo "Waiting for VPN connection..."
+          while ! ip link show tun0 >/dev/null 2>&1; do
+            echo "Waiting for tun0 interface..."
+            sleep 5
+          done
+          
+          # Copy configuration overlay
+          if [ -f /config-overlay/qBittorrent.conf ]; then
+            cp /config-overlay/qBittorrent.conf /config/qBittorrent/
+          fi
+          
+          # Start qBittorrent with original entrypoint
+          exec /init
         resources:
           requests:
             memory: "512Mi"
@@ -49,6 +176,44 @@ spec:
           limits:
             memory: "2Gi"
             cpu: "1000m"
+        # Health check to ensure VPN connectivity
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - |
+              # Check if we can reach internet through VPN only
+              if ip link show tun0 >/dev/null 2>&1; then
+                # Try to reach a test endpoint through VPN interface
+                curl -s --max-time 10 --interface tun0 https://ipinfo.io/ip >/dev/null
+              else
+                exit 1
+              fi
+          initialDelaySeconds: 60
+          periodSeconds: 60
+          timeoutSeconds: 15
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        # Ensure container stops if VPN fails (kill switch)
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - sh
+              - -c
+              - |
+                echo "Stopping qBittorrent gracefully..."
+                killall qbittorrent-nox || true
+                sleep 5
+      
       volumes:
       - name: config
         persistentVolumeClaim:
@@ -56,3 +221,13 @@ spec:
       - name: downloads
         persistentVolumeClaim:
           claimName: qbittorrent-downloads-pvc
+      - name: tailscale-state
+        emptyDir: {}
+      - name: tailscale-config
+        configMap:
+          name: tailscale-config
+          defaultMode: 0755
+      - name: qbittorrent-config
+        configMap:
+          name: qbittorrent-config
+          defaultMode: 0644
